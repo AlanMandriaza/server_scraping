@@ -1,0 +1,10 @@
+{
+    "CLOUDINARY_CLOUD_NAME": "dfpfb6yon",
+    "CLOUDINARY_API_KEY": "627212392514143",
+    "CLOUDINARY_API_SECRET": "BNNu7S6NFIsOak56I7M1wvm_Pvw",
+    "db_host": "localhost",
+    "db_port": 3306,
+    "db_user": "alantiwa",
+    "db_password": "amazingly1313",
+    "db_name": "only"
+}
