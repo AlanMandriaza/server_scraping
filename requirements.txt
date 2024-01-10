@@ -1,0 +1,10 @@
+Flask
+Flask-Cors
+sqlalchemy
+requests
+selenium
+validators
+beautifulsoup4
+webdriver_manager
+mysqlclient
+pymysql
