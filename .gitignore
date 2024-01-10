@@ -1,5 +1,5 @@
 # Dependencias de Node (por ejemplo, si estás usando Node.js en tu proyecto)
-/node_modules/
+/Front/node_modules/
 /.pnp
 .pnp.js
 
