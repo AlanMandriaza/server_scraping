@@ -11,7 +11,7 @@
 
 # Archivos y carpetas misceláneos
 .DS_Store
-/public/images/
+/Front/public/images/
 /Back/config.json
 
 # Archivos de entorno local
