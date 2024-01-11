@@ -11,8 +11,8 @@ from endpoints.filtros.sortbycat import sortbycat_bp
 app = Flask(__name__)
 CORS(app)
 
-# Ruta al archivo de configuración en el mismo directorio que app.py
-CONFIG_FILE_PATH = 'config.json'  # No se necesita una ruta completa
+
+CONFIG_FILE_PATH = 'config.json'  
 
 with open(CONFIG_FILE_PATH, 'r') as config_file:
     config_data = json.load(config_file)

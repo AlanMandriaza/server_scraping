@@ -57,10 +57,18 @@ def get_creador_details(creador_id: str, session: Session) -> dict:
 
 def get_suggestions(query: str, session: Session, limit: int = 5) -> list:
     try:
+        # Consulta los creadores que coinciden con la consulta y están actualizados
         suggestions = session.query(Creador).filter(
             or_(Creador.nombre.ilike(f"%{query}%"), Creador.creador_id.ilike(f"%{query}%")),
             Creador.estado == "actualizado"
-        ).limit(limit).all()
+        ).all()
+
+        # Ordena la lista de sugerencias por likes en orden descendente
+        suggestions.sort(key=lambda creador: convertir_likes_a_numero(creador.likes), reverse=True)
+
+        # Limita los resultados al número especificado
+        suggestions = suggestions[:limit]
+
         results = [{'creador_id': creador.creador_id} for creador in suggestions]
         return results
     except Exception as e:

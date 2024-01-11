@@ -304,7 +304,7 @@ def get_chrome_service():
     return chrome_service, chrome_options
 
 def procesa_creadores(creador_ids):
-    images_folder = '/home/alantiwa/proyecto/Front/public/images'
+    images_folder = '/home/alantiwa/proyecto/front/public/images'
     os.makedirs(images_folder, exist_ok=True)
     chrome_service, chrome_options = get_chrome_service()
     driver = webdriver.Chrome(service=chrome_service, options=chrome_options)

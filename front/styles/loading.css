@@ -1,0 +1,19 @@
+.loading {
+    width: 30px; /* Ajusta el ancho del círculo */
+    height: 30px; /* Ajusta la altura del círculo */
+    border: 4px solid #008cc0; /* Establece el color y grosor del borde */
+    border-top: 4px solid transparent; /* Hace que el borde superior sea transparente para dar la apariencia de un círculo */
+    border-radius: 50%; /* Hace que el borde sea redondeado para formar un círculo */
+    animation: spin 1s infinite linear; /* Agrega la animación 'spin' */
+    display: inline-block; /* Hace que el componente sea en línea para que no ocupe toda la línea */
+  }
+  
+  @keyframes spin {
+    from {
+      transform: rotate(0deg); /* Empieza desde 0 grados */
+    }
+    to {
+      transform: rotate(360deg); /* Termina en 360 grados (una vuelta completa) */
+    }
+  }
+  

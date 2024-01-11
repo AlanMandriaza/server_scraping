@@ -17,7 +17,7 @@ from models.main import Categoria, CreadorCategoriaAssociation, Creador, Session
 
 def procesar_categorias(session, creador):
     # Verificar si la biografía existe y no está vacía
-    if creador.biografia:
+    if creador.estado == "actualizado" and creador.biografia:
         # Obtener el contenido de la biografía en minúsculas con casefold
         biografia_lower = creador.biografia.casefold()
 

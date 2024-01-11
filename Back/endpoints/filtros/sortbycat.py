@@ -8,10 +8,6 @@ from models.main import Categoria, CreadorCategoriaAssociation, Creador, engine
 sortbycat_bp = Blueprint('sortbycat', __name__)
 Session = sessionmaker(bind=engine)
 
-
-sortbycat_bp = Blueprint('sortbycat', __name__)
-Session = sessionmaker(bind=engine)
-
 @sortbycat_bp.route('/categories', methods=['GET'])
 def get_categories():
     try:
@@ -85,12 +81,23 @@ def get_creators_in_category_by_name(category_name):
                     {
                         'creador_id': creador.creador_id,
                         'nombre': creador.nombre,
-                        # Include other fields as needed
-                        'likes': convertir_likes_a_numero(creador.likes),
-                        # Add other fields from Creador as required
-                    } for creador in creators
-                ], 
-                key=lambda x: x['likes'], 
+                        'pais': creador.pais,
+                        'biografia': creador.biografia,
+                        'categorias_asociadas': creador.categorias_asociadas,
+                        'precio_suscripcion': creador.precio_suscripcion,
+                        'videos': creador.videos,
+                        'fotos': creador.fotos,
+                        'streams': creador.streams,
+                        'likes': convertir_likes_a_numero(creador.likes),  # Converted likes
+                        'fans': creador.fans,
+                        'redes_sociales': creador.redes_sociales,
+                        'verificado': creador.verificado,
+                        'estado': creador.estado,
+                        'actualizacion': creador.actualizacion,
+                    }
+                    for creador in creators
+                ],
+                key=lambda x: x['likes'],
                 reverse=True
             )
 
@@ -101,13 +108,14 @@ def get_creators_in_category_by_name(category_name):
             paginated_creators = creators_list[start_idx:end_idx]
             total_pages = (total_creators + per_page - 1) // per_page
 
-            return jsonify({
-                'categoria': category_name, 
-                'cantidad_creadores': total_creators, 
+            # Create the response object
+            response_data = {
                 'creadores': paginated_creators,
                 'total_paginas': total_pages,
                 'pagina_actual': page
-            })
+            }
+
+            return jsonify(response_data)
 
     except Exception as e:
         return jsonify({'error': 'Internal Server Error', 'details': str(e)}), 500

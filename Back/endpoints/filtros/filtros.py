@@ -65,9 +65,9 @@ def filtrar_creadores_por_likes():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
-
 def convertir_likes_a_numero(likes):
+  
+
     if likes is None:
         return 0.0
 
