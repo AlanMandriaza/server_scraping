@@ -1,169 +1,137 @@
+.content {
+  margin-top: 67px;
+}
 .creador-card {
   display: flex;
-  width: 100%;
-  padding: 15px;
-  margin: 10px;
-  border: 1px solid #ddd;
+  width: 65%;
+  margin-top: 13px;
+  border: 1px solid #ccc;
   border-radius: 8px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  list-style: none;
-  background-color: #fff;
+  overflow: hidden;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.avatar-container {
+  flex: 0 0 150px; 
   position: relative;
-}
-
-.creador-content {
-  display: flex;
-  width: 30%;
-}
-
-.creador-info,
-.creador-stats {
-  width: 100%;
-}
-
-.creador-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
 }
 
 .avatar-image {
   width: 100px;
   height: 100px;
-  cursor: pointer;
   border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 10px;
+  margin-top: 108px;
+  margin-left: -367px;
 }
 
-.social-icon {
-  margin-right: 5px;
-  font-size: 18px;
-  color: #333;
-}
+.creador-content {
+  flex: 1;
 
-.creador-stats {
-  margin-top: 23px;
   display: flex;
-  flex-direction: row;
-  align-items: flex-start;
+  flex-direction: column;
   justify-content: space-between;
-  margin-left: 10px;
 }
 
-.stat-info {
-  margin-top: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+.creador-header {
+ 
+  padding: 10px;
 }
 
-.bio-visible {
-  display: block;
-  margin-top: 10px;
-}
-
-.paginacion-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.paginacion-button,
-.paginacion-button a {
-  background-color: #00aff0 !important;
-  color: white !important;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  margin: 0 5px;
-  cursor: pointer;
-  text-decoration: none !important;
-}
-
-.paginacion-button:hover,
-.paginacion-button a:hover {
-  background-color: #008cc0 !important;
-}
-
-.subscription-button {
-  cursor: pointer;
-  background: #00aff0 !important;
-  color: #fff;
-  width: 120px;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  text-decoration: none;
-  margin-top: 10px;
-}
-
-.subscription-button:hover {
-  background-color: #45a049;
-}
-
-.creador-buttons {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-top: 10px;
-}
-
-.bio-image {
-  height: 191px;
-    width: 416px;
-  border-radius: 8px;
-  object-fit: cover;
-  object-position: center;
-  margin-top: 10px;
-}
-
-.creadores-list {
-  width: 70%;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.of-text {
-  margin: 0 5px;
-  color: darkblue;
-}
-
-.verificado-container {
-  display: flex;
-  align-items: center;
+.creador-title {
+  font-size: 18px;
+  margin: 0;
+  color: #333;
 }
 
 .verificado-mark {
   color: green;
+  margin-right: 5px;
 }
 
-.verificado-x {
-  color: red;
+.bio-container {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 5px;
+  border-radius: 4px;
 }
 
-.creador-stats .redes-sociales,
-.creador-stats .likes,
-.creador-stats .pais,
-.creador-stats .videos,
-.creador-stats .fotos,
-.creador-stats .suscripciones,
-.creador-stats .streams {
-  padding-right: 6px;
+.bio-text {
+  font-size: 14px;
+  color: #333;
+  margin-left: 366px;
+  margin-top: -207px;
+  
+  padding-left: 20px;
+  width: auto;
+  height: 100%;
+  margin-bottom: 50px;
+  min-height: 155px;
 }
 
-@media (max-width: 1332px) {
-  .creador-content {
-    width: 100%;
-  }
+.creador-actions {
+  display: flex;
+  justify-content: space-around;
+}
 
-  .creador-info {
-    align-items: center;
-  }
+.subscription-button, .show-bio-button {
+  border: none;
+  background-color: #007bff;
+  color: white;
+  padding: 8px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  border-radius: 4px;
+  min-width: 108px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+.show-bio-button {
+  display: none;
+}
+.creador-stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  font-size: 14px;
+  margin-top: 15px;
+  color: #666;
+}
 
-  .avatar-image {
-    margin-bottom: 0;
-  }
+.social-icon, .video-icon, .stream-icon, .photo-icon {
+  margin-right: 5px;
+}
+
+.likes, .pais, .videos, .fotos, .suscripciones, .streams {
+  display: flex;
+  align-items: center;
+}
+
+.tags-container {
+  padding: 10px;
+}
+
+.categorias-lista {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.categorias-lista li {
+  margin-right: 10px;
+  background-color: #007bff;
+  color: white;
+  padding: 3px 7px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+.bio-image{
+  width: 357px;
+  height: 185px;
+  border-radius: 6%;
+  object-fit: cover;
+  margin-bottom: 15px;
 }

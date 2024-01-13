@@ -1,63 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  FaPhotoVideo,
-  FaCheck,
-  FaFacebook,
-  FaTwitter,
-  FaHeart,
-  FaInstagram,
-  FaMapMarker,
-  FaTiktok,
-  FaSnapchat,
+  FaPhotoVideo, FaCheck, FaFacebook, FaTwitter, FaHeart,
+  FaInstagram, FaMapMarker, FaTiktok, FaSnapchat,
 } from 'react-icons/fa';
 import { BsCameraVideo, BsImages } from 'react-icons/bs';
 import '../styles/creadores.css';
 
 const CreadorCard = ({ creador, handleImageClick }) => {
+  const [showBio, setShowBio] = useState(false);
   const categoriasAsociadasArray = JSON.parse(creador.categorias_asociadas);
+
+  const toggleBio = () => {
+    setShowBio(prev => !prev);
+  };
 
   const getSocialMediaIcon = (socialMediaName) => {
     switch (socialMediaName.toLowerCase()) {
-      case 'facebook':
-        return <FaFacebook className="social-icon" />;
-      case 'twitter':
-        return <FaTwitter className="social-icon" />;
-      case 'instagram':
-        return <FaInstagram className="social-icon" />;
-      case 'tiktok':
-        return <FaTiktok className="social-icon" />;
-      case 'snapchat':
-        return <FaSnapchat className="social-icon" />;
-      default:
-        return null;
+      case 'facebook': return <FaFacebook className="social-icon" />;
+      case 'twitter': return <FaTwitter className="social-icon" />;
+      case 'instagram': return <FaInstagram className="social-icon" />;
+      case 'tiktok': return <FaTiktok className="social-icon" />;
+      case 'snapchat': return <FaSnapchat className="social-icon" />;
+      default: return null;
     }
   };
 
-  const getVideoIcon = () => {
-    return <BsCameraVideo className="video-icon" />;
-  };
-
-  const getStreamIcon = () => {
-    return <FaPhotoVideo className="stream-icon" />;
-  };
-
-  const getPhotoIcon = () => {
-    return <BsImages className="photo-icon" />;
-  };
+  const getVideoIcon = () => <BsCameraVideo className="video-icon" />;
+  const getStreamIcon = () => <FaPhotoVideo className="stream-icon" />;
+  const getPhotoIcon = () => <BsImages className="photo-icon" />;
 
   const getSubscriptionIcon = () => {
-    return creador.precio_suscripcion === '0' || creador.precio_suscripcion === 0
-      ? 'Free'
-      : creador.precio_suscripcion
-        ? `${creador.precio_suscripcion} USD`
-        : null;
+    if (creador.precio_suscripcion === '0' || creador.precio_suscripcion === 0) {
+      return 'Free';
+    }
+    return creador.precio_suscripcion ? `${creador.precio_suscripcion} USD` : null;
   };
 
   return (
     <li className="creador-card">
-      <div className="creador-content container">
-        <div className="creador-info">
-          <h3 className="verificado-container">
+      <div className="creador-content">
+        <div className="creador-header">
+          <h3 className="creador-title">
             {creador.verificado ? (
               <FaCheck className="verificado-mark" />
             ) : (
@@ -65,34 +48,38 @@ const CreadorCard = ({ creador, handleImageClick }) => {
             )}
             {creador.nombre}
           </h3>
-          <div className='image'>
-           
-            <img
-              src={`/images/${creador.creador_id}/${creador.creador_id}_bio.jpg`}
-              alt={`${creador.nombre} Biography`}
-              className="bio-image"
-            />
-             <img
-              src={`/images/${creador.creador_id}/${creador.creador_id}.jpg`}
-              alt={`${creador.nombre} Profile`}
-              onClick={() => handleImageClick(`/images/${creador.creador_id}/${creador.creador_id}_hd.jpg`)}
-              className="avatar-image"
-            />
+          <div className="avatar-container">
+
+            <div className="bio-container">
+              <img
+                src={`/images/${creador.creador_id}/${creador.creador_id}_bio.jpg`}
+                alt={`${creador.nombre} Biography`}
+                className={`bio-image ${showBio ? '' : 'hide-on-mobile'}`}
+              />
+              <img
+                src={`/images/${creador.creador_id}/${creador.creador_id}.jpg`}
+                alt={`${creador.nombre} Profile`}
+                onClick={() => handleImageClick(`/images/${creador.creador_id}/${creador.creador_id}_hd.jpg`)}
+                className="avatar-image"
+              /><p className={`bio-text ${showBio ? '' : 'hide-on-mobile'}`}>{creador.biografia}</p>
+
+            
+            <button
+              onClick={() => window.open(`https://onlyfans.com/${creador.creador_id}`, '_blank', 'noopener,noreferrer')}
+              className="subscription-button"
+            >
+              {getSubscriptionIcon()}
+            </button>
+
+            <button onClick={toggleBio} className={`show-bio-button ${showBio ? 'active' : ''}`}>
+              {getPhotoIcon()} Show Bio
+            </button>
+            </div>
           </div>
         </div>
-        {categoriasAsociadasArray && Array.isArray(categoriasAsociadasArray) && categoriasAsociadasArray.length > 0 && (
-          <div>
-            <h4>Tags:</h4>
-            <ul className="categorias-lista">
-              {categoriasAsociadasArray.map((categoria, index) => (
-                <li key={index}>{categoria}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
-      <div className="creador-body">
+
         <div className="creador-stats">
+
           {creador.redes_sociales && creador.redes_sociales.length > 0 && (
             <div className="redes-sociales">
               {creador.redes_sociales.map((redSocial, index) => (
@@ -102,8 +89,7 @@ const CreadorCard = ({ creador, handleImageClick }) => {
               ))}
             </div>
           )}
-         
-          {(creador.likes !== undefined && creador.likes && creador.streams !== null !== null && parseFloat(creador.likes) !== 0) && (creador.visible === undefined || creador.visible) && (
+          {(creador.likes !== undefined && creador.likes !== null && parseFloat(creador.likes) !== 0) && (creador.visible === undefined || creador.visible) && (
             <div className="likes">
               <FaHeart /> {parseFloat(creador.likes).toLocaleString()}
             </div>
@@ -128,8 +114,17 @@ const CreadorCard = ({ creador, handleImageClick }) => {
             </div>
           )}
         </div>
-        <div>
-          <p className="bio-visible">{creador.biografia}</p>
+        <div className='tags-container'>
+          {categoriasAsociadasArray && Array.isArray(categoriasAsociadasArray) && categoriasAsociadasArray.length > 0 && (
+            <div>
+              <h4>Tags:</h4>
+              <ul className="categorias-lista">
+                {categoriasAsociadasArray.map((categoria, index) => (
+                  <li key={index}>{categoria}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </li>
