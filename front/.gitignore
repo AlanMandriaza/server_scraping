@@ -7,7 +7,7 @@
 /public/images
 # testing
 /coverage
-
+/venv/
 # production
 /build
 
