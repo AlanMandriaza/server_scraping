@@ -1,5 +1,6 @@
 # Dependencias de Node (por ejemplo, si estás usando Node.js en tu proyecto)
-/Front/node_modules/
+/front/node_modules/
+/front/public/images/
 /.pnp
 .pnp.js
 
@@ -11,7 +12,7 @@
 
 # Archivos y carpetas misceláneos
 .DS_Store
-/Front/public/images/
+
 /Back/config.json
 /venv/
 # Archivos de entorno local
