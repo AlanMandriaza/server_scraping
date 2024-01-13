@@ -4,10 +4,10 @@
 /node_modules
 /.pnp
 .pnp.js
-/public/images
+public/images/
 # testing
 /coverage
-/venv/
+../venv/
 # production
 /build
 
