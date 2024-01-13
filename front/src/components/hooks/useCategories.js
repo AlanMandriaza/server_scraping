@@ -14,6 +14,8 @@ const useCategories = () => {
         throw new Error(`Error en la obtención de categorías: ${response.statusText}`);
       }
       const data = await response.json();
+      console.log('Respuesta de la API:', response); // Aquí se imprime la respuesta de la API
+      console.log('Datos de la respuesta aapi:', data); // Aquí se imprimen los datos de la respuesta
       setCategories(data);
     } catch (error) {
       console.error('Error al obtener categorías:', error);
@@ -22,6 +24,7 @@ const useCategories = () => {
       setLoading(false);
     }
   }, []);
+  
 
   return { categories, fetchCategories, loading, error };
 };

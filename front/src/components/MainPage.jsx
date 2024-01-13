@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Navbar from './Navbar';
 import CreadorCard from './CreadorCard';
 import useSearch from './hooks/useSearch';
@@ -6,45 +6,45 @@ import useTopLikes from './hooks/useTopLikes';
 import useCategories from './hooks/useCategories';
 import useCreatorsByCategory from './hooks/useCreatorsByCategory';
 
-const MainPage = () => {
+const RESULTS_PER_PAGE = 10;
 
+const MainPage = () => {
+  const { creators, fetchCreatorsByCategory, error: errorCreators } = useCreatorsByCategory();
   const { searchResults, suggestions, loading: loadingSearch, error: errorSearch, handleSearch, handleSuggestionClick } = useSearch();
   const { topLikesData, loading: loadingTopLikes, error: errorTopLikes, fetchTopLikes } = useTopLikes();
   const { categories, loading: loadingCategories, error: errorCategories, fetchCategories } = useCategories();
-  const { creators, fetchCreatorsByCategory, loading: loadingCreators, error: errorCreators } = useCreatorsByCategory();
+
   const [currentPage, setCurrentPage] = useState(1);
-  const RESULTS_PER_PAGE = 10;
   const [totalPages, setTotalPages] = useState(0);
   const MAX_PAGES_SHOWN = 5;
   const [activeDataSet, setActiveDataSet] = useState('searchResults');
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [creatorsByCategory, setCreatorsByCategory] = useState([]);
 
-
-  const handleCategoryClick = async (categoryName) => {
-
+  const handleCategoryClick = useCallback(async (categoryName) => {
     try {
-
-      const response = await fetchCreatorsByCategory(categoryName);
-      if (response && response.data) {
-        setCreatorsByCategory(response.data.creadores);
-      } else {
-        console.error('Error en la respuesta del API');
-      }
+      await fetchCreatorsByCategory(categoryName);
+      setActiveDataSet('category');
+      console.log('Successfully fetched creators for category:', categoryName);
     } catch (error) {
-      console.error('Error fetching creators', error);
+      console.error('Error fetching creators for category:', error);
     }
-  }
+  }, [fetchCreatorsByCategory]);
 
   useEffect(() => {
-    fetchCategories();
-  }, [fetchCategories]);
+  fetchCategories()
+    .then((data) => {
+      console.log('Datos de categorías:', data);
+    })
+    .catch((error) => {
+      console.error('Error al obtener categorías:', error);
+    });
+}, [fetchCategories]);
+
 
   useEffect(() => {
     if (activeDataSet === 'searchResults') {
       setTotalPages(Math.ceil(searchResults.length / RESULTS_PER_PAGE));
     } else if (activeDataSet === 'topLikes') {
-      setTotalPages(Math.ceil(topLikesData.total_paginas));
+      setTotalPages(topLikesData.total_paginas || 0);
     }
   }, [searchResults, topLikesData, activeDataSet]);
 
@@ -52,6 +52,7 @@ const MainPage = () => {
     fetchTopLikes(currentPage);
     setActiveDataSet('topLikes');
   };
+
   useEffect(() => {
     if (activeDataSet === 'topLikes') {
       fetchTopLikes(currentPage);
@@ -63,19 +64,16 @@ const MainPage = () => {
   };
 
   const paginationButtons = [];
-  const startPage = Math.max(1, currentPage - Math.floor(MAX_PAGES_SHOWN / 2));
-  const endPage = Math.min(totalPages, startPage + MAX_PAGES_SHOWN - 1);
-
-  for (let i = startPage; i <= endPage; i++) {
+  for (let i = Math.max(1, currentPage - Math.floor(MAX_PAGES_SHOWN / 2)); i <= Math.min(totalPages, currentPage + MAX_PAGES_SHOWN - 1); i++) {
     paginationButtons.push(
       <button key={i} onClick={() => handlePageChange(i)} className={`page-button ${currentPage === i ? 'active' : ''}`}>
         {i}
       </button>
     );
   }
+
   const canGoPrev = currentPage > 1;
   const canGoNext = currentPage < totalPages;
-  console.log('creatorsByCategory:', creatorsByCategory); // Agrega este console.log
 
   return (
     <div className="main-page">
@@ -97,21 +95,18 @@ const MainPage = () => {
         {errorTopLikes && <p className="error-message">{errorTopLikes}</p>}
         {loadingCategories && <p className="loading-message">Cargando categorías...</p>}
         {errorCategories && <p className="error-message">{errorCategories}</p>}
+        {errorCreators && <p className="error-message">{errorCreators}</p>}
       </div>
       <div className="content">
-        {(activeDataSet === 'searchResults' ? searchResults : topLikesData.creadores)?.map((creador, index) => (
+        {activeDataSet === 'searchResults' && searchResults.map((creador, index) => (
           <CreadorCard key={index} creador={creador} className="creador-card" />
         ))}
-        <div className="content">
-          {activeDataSet === 'category' && creatorsByCategory.length > 0 && creatorsByCategory.map((creador, index) => (
-            <CreadorCard key={index} creador={creador} className="creador-card" />
-          ))}
-        </div>
-        {activeDataSet === 'category' &&
-          creatorsByCategory.map(creador => (
-            <CreadorCard creador={creador} />
-          ))
-        }
+        {activeDataSet === 'topLikes' && topLikesData.creadores?.map((creador, index) => (
+          <CreadorCard key={index} creador={creador} className="creador-card" />
+        ))}
+        {activeDataSet === 'category' && creators.map((creador, index) => (
+          <CreadorCard key={index} creador={creador} className="creador-card" />
+        ))}
       </div>
       <div className="pagination">
         {canGoPrev && <button onClick={() => handlePageChange(currentPage - 1)} className="prev-button">Prev</button>}

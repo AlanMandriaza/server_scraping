@@ -4,7 +4,7 @@ import '../styles/navbar.css';
 const Navbar = ({ onSearch, onTopLikes, suggestions, handleSuggestionClick, categories, onCategoryClick }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef(null); // Un solo ref para el dropdown
 
   const handleInputChange = (e) => {
     setSearchQuery(e.target.value);
@@ -55,13 +55,14 @@ const Navbar = ({ onSearch, onTopLikes, suggestions, handleSuggestionClick, cate
           </button>
           {showDropdown && (
             <div className="categories-dropdown" ref={dropdownRef}>
-              {categories.map((category, index) => (
+              {categories && categories.map((category, index) => (
                 <div key={index} onClick={() => onCategoryClick(category.nombre)}>
                   {category.nombre} ({category.asociaciones})
                 </div>
               ))}
             </div>
           )}
+
         </div>
       </div>
     </div>
