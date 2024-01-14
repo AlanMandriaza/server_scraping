@@ -29,7 +29,8 @@ class Creador(Base):
     nombre = Column(String(100), index=True)
     pais = Column(String(50), index=True)
     biografia = Column(String(1000))
-    categorias_asociadas = Column(String(1000))
+    categorias_asociadas = Column(JSON, default=list)
+
     precio_suscripcion = Column(String(50))
     videos = Column(String(100))
     fotos = Column(String(100))

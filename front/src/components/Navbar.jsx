@@ -36,15 +36,29 @@ const Navbar = ({ onSearch, onTopLikes, suggestions, handleSuggestionClick, cate
             placeholder="Search..."
             className="search-input"
           />
-          {suggestions.length > 0 && searchQuery && (
+          {suggestions.length > 0 && (
+
             <div className="suggestions-list" ref={dropdownRef}>
-              {suggestions.map((suggestion, index) => (
-                <div key={index} onClick={() => handleSuggestionClick(suggestion)}>
-                  {suggestion.creador_id}
-                </div>
-              ))}
+          {suggestions.map((suggestion, index) => (
+  <div key={index} onClick={() => {
+    if (typeof suggestion === 'string') {
+      console.log("Category clicked:", suggestion);
+      onCategoryClick(suggestion);
+    } else if (suggestion && suggestion.creador_id) {
+      console.log("Suggestion clicked:", suggestion);
+      handleSuggestionClick(suggestion);
+    }
+  }}>
+    {typeof suggestion === 'string' ? suggestion : suggestion.name}
+  </div>
+))}
+
+
+
             </div>
+
           )}
+
         </div>
         <div className="navbar-links">
           <button onClick={onTopLikes} className="likes-button">

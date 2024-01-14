@@ -14,12 +14,17 @@ sys.path.append(parent_dir)
 
 from models.main import Categoria, CreadorCategoriaAssociation, Creador, Session
 
+def normalizar_texto(texto):
+    return texto.replace('/', '')
 
 def procesar_categorias(session, creador):
+    """
+    Procesa y asocia categorías a un creador basado en su biografía.
+    """
     # Verificar si la biografía existe y no está vacía
     if creador.estado == "actualizado" and creador.biografia:
-        # Obtener el contenido de la biografía en minúsculas con casefold
-        biografia_lower = creador.biografia.casefold()
+        # Normalizar y obtener el contenido de la biografía en minúsculas
+        biografia_normalizada = normalizar_texto(creador.biografia).casefold()
 
         # Eliminar todas las asociaciones existentes para el creador
         session.query(CreadorCategoriaAssociation).filter_by(
@@ -33,14 +38,11 @@ def procesar_categorias(session, creador):
 
         # Iterar sobre las categorías existentes
         for categoria in all_categories:
-            # Obtener el nombre de la categoría en minúsculas con casefold
-            categoria_nombre_lower = categoria.nombre.casefold()
-
-            # Imprimir para depuración
-            print(f"Buscando {categoria_nombre_lower} en {biografia_lower}")
+            # Normalizar el nombre de la categoría
+            categoria_nombre_normalizado = normalizar_texto(categoria.nombre).casefold()
 
             # Si la categoría está en la biografía, agregarla a la lista
-            if categoria_nombre_lower in biografia_lower:
+            if categoria_nombre_normalizado in biografia_normalizada:
                 # Crear una instancia de la asociación CreadorCategoriaAssociation
                 asociacion = CreadorCategoriaAssociation(
                     creador_id=creador.creador_id,
@@ -52,17 +54,26 @@ def procesar_categorias(session, creador):
 
                 nuevas_categorias_asociadas.append(categoria.nombre)
 
-        # Convertir la lista de categorías a formato JSON y asignarla a la columna correspondiente
-        creador.categorias_asociadas = json.dumps(nuevas_categorias_asociadas)
+        # Asignar la lista directamente a la columna JSON
+        creador.categorias_asociadas = nuevas_categorias_asociadas
 
+# Obtener la ruta del directorio actual del script
+current_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Luego, en tu script principal o donde sea que estés usando esta lógica:
+# Obtener la ruta del directorio superior (padre)
+parent_dir = os.path.join(current_dir, '..')
 
-with Session() as session:
-    creadores = session.query(Creador).all()
+# Añadir el directorio padre al sys.path
+sys.path.append(parent_dir)
 
-    for creador in creadores:
-        procesar_categorias(session, creador)
+# Lógica principal
+if __name__ == "__main__":
+    with Session() as session:
+        creadores = session.query(Creador).all()
 
-    # Guardar los cambios en la base de datos
-    session.commit()
+        for creador in creadores:
+            procesar_categorias(session, creador)
+
+        # Guardar los cambios en la base de datos
+        session.commit()
+

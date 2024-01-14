@@ -3,11 +3,9 @@ import logging
 from flask import Blueprint, request, jsonify
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
-from models.main import Creador, Session as DBSession
+from models.main import Creador, Categoria, Session as DBSession
 
 sortbyname_bp = Blueprint('sortbyname', __name__)
-
-# Configure the logging level
 logging.basicConfig(level=logging.DEBUG)
 
 def convertir_likes_a_numero(likes):
@@ -42,7 +40,7 @@ def get_creador_details(creador_id: str, session: Session) -> dict:
                 'videos': creador.videos,
                 'fotos': creador.fotos,
                 'streams': creador.streams,
-                'likes': convertir_likes_a_numero(creador.likes),  # Converted likes
+                'likes': convertir_likes_a_numero(creador.likes),
                 'fans': creador.fans,
                 'redes_sociales': creador.redes_sociales,
                 'verificado': creador.verificado,
@@ -55,22 +53,38 @@ def get_creador_details(creador_id: str, session: Session) -> dict:
         logging.error(f"Error retrieving creator details: {e}")
         return None
 
-def get_suggestions(query: str, session: Session, limit: int = 5) -> list:
+def get_category_suggestions(query: str, session: Session, limit: int = 2) -> list:
     try:
-        # Consulta los creadores que coinciden con la consulta y están actualizados
+        categories = session.query(Categoria).filter(
+            Categoria.nombre.ilike(f"%{query}%")
+        ).limit(limit).all()
+
+        return [categoria.nombre for categoria in categories]
+    except Exception as e:
+        logging.error(f"Error retrieving category suggestions: {e}")
+        return []
+
+def get_combined_suggestions(query: str, session: Session, category_limit: int = 2, creador_limit: int = 3) -> dict:
+    try:
+        category_suggestions = get_category_suggestions(query, session, category_limit)
+        creator_suggestions = get_suggestions(query, session, creador_limit)
+
+        return {
+            'categorias': category_suggestions,
+            'creadores': creator_suggestions
+        }
+    except Exception as e:
+        logging.error(f"Error retrieving combined suggestions: {e}")
+        return {}
+
+def get_suggestions(query: str, session: Session, limit: int = 3) -> list:
+    try:
         suggestions = session.query(Creador).filter(
             or_(Creador.nombre.ilike(f"%{query}%"), Creador.creador_id.ilike(f"%{query}%")),
             Creador.estado == "actualizado"
-        ).all()
+        ).limit(limit).all()
 
-        # Ordena la lista de sugerencias por likes en orden descendente
-        suggestions.sort(key=lambda creador: convertir_likes_a_numero(creador.likes), reverse=True)
-
-        # Limita los resultados al número especificado
-        suggestions = suggestions[:limit]
-
-        results = [{'creador_id': creador.creador_id} for creador in suggestions]
-        return results
+        return [{'creador_id': creador.creador_id} for creador in suggestions]
     except Exception as e:
         logging.error(f"Error retrieving creator suggestions: {e}")
         return []
@@ -92,9 +106,10 @@ def get_creador_or_suggestions() -> jsonify:
                 logging.warning("Creador not found")
                 return jsonify({'message': 'Creador no encontrado'}), 404
         elif query:
-            results = get_suggestions(query, session)
-            logging.debug("Returning suggestions: %s", results)
+            results = get_combined_suggestions(query, session)
+            logging.debug("Returning combined suggestions: %s", results)
             return jsonify(results)
         else:
             logging.warning("Missing required parameters")
             return jsonify({'message': 'Se requiere el parámetro creador_id o query'}), 400
+

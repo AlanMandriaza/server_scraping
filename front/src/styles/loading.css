@@ -5,7 +5,7 @@
     border-top: 4px solid transparent; /* Hace que el borde superior sea transparente para dar la apariencia de un círculo */
     border-radius: 50%; /* Hace que el borde sea redondeado para formar un círculo */
     animation: spin 1s infinite linear; /* Agrega la animación 'spin' */
-    display: inline-block; /* Hace que el componente sea en línea para que no ocupe toda la línea */
+    
   }
   
   @keyframes spin {

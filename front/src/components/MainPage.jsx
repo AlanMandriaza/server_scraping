@@ -10,7 +10,9 @@ const RESULTS_PER_PAGE = 10;
 
 const MainPage = () => {
   const { creators, fetchCreatorsByCategory, error: errorCreators } = useCreatorsByCategory();
-  const { searchResults, suggestions, loading: loadingSearch, error: errorSearch, handleSearch, handleSuggestionClick } = useSearch();
+
+  const { searchResults, suggestions, loading: loadingSearch, error: errorSearch, handleSearch, handleSuggestionClick } = useSearch(fetchCreatorsByCategory);
+
   const { topLikesData, loading: loadingTopLikes, error: errorTopLikes, fetchTopLikes } = useTopLikes();
   const { categories, loading: loadingCategories, error: errorCategories, fetchCategories } = useCategories();
 
@@ -19,8 +21,10 @@ const MainPage = () => {
   const MAX_PAGES_SHOWN = 5;
   const [activeDataSet, setActiveDataSet] = useState('searchResults');
 
+  // Función para manejar el clic en una categoría
   const handleCategoryClick = useCallback(async (categoryName) => {
     try {
+      // Llama al hook de la categoría para obtener los creadores de la categoría seleccionada
       await fetchCreatorsByCategory(categoryName);
       setActiveDataSet('category');
       console.log('Successfully fetched creators for category:', categoryName);
@@ -30,15 +34,15 @@ const MainPage = () => {
   }, [fetchCreatorsByCategory]);
 
   useEffect(() => {
-  fetchCategories()
-    .then((data) => {
-      console.log('Datos de categorías:', data);
-    })
-    .catch((error) => {
-      console.error('Error al obtener categorías:', error);
-    });
-}, [fetchCategories]);
-
+    // Fetch de categorías
+    fetchCategories()
+      .then((data) => {
+        console.log('Datos de categorías:', data);
+      })
+      .catch((error) => {
+        console.error('Error al obtener categorías:', error);
+      });
+  }, [fetchCategories]);
 
   useEffect(() => {
     if (activeDataSet === 'searchResults') {
@@ -86,7 +90,7 @@ const MainPage = () => {
         suggestions={suggestions}
         handleSuggestionClick={handleSuggestionClick}
         categories={categories}
-        onCategoryClick={handleCategoryClick}
+        onCategoryClick={handleCategoryClick} // Pasa la función de manejo de clic a Navbar
       />
       <div className="loading-and-error">
         {loadingSearch && <p className="loading-message">Cargando búsqueda...</p>}
