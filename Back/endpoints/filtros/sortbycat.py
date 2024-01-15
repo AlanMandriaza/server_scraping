@@ -56,7 +56,6 @@ def convertir_likes_a_numero(likes):
         # Return 0 if it cannot be converted
         return 0.0
 
-# ...
 
 @sortbycat_bp.route('/categories/<string:category_name>', methods=['GET'])
 def filtrar_creadores_por_likes(category_name):

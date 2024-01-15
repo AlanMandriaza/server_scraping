@@ -59,7 +59,7 @@ def get_category_suggestions(query: str, session: Session, limit: int = 2) -> li
             Categoria.nombre.ilike(f"%{query}%")
         ).limit(limit).all()
 
-        return [categoria.nombre for categoria in categories]
+        return [{'tipo': 'categoria', 'nombre': categoria.nombre} for categoria in categories]
     except Exception as e:
         logging.error(f"Error retrieving category suggestions: {e}")
         return []
@@ -84,7 +84,7 @@ def get_suggestions(query: str, session: Session, limit: int = 3) -> list:
             Creador.estado == "actualizado"
         ).limit(limit).all()
 
-        return [{'creador_id': creador.creador_id} for creador in suggestions]
+        return [{'tipo': 'creador', 'creador_id': creador.creador_id} for creador in suggestions]
     except Exception as e:
         logging.error(f"Error retrieving creator suggestions: {e}")
         return []

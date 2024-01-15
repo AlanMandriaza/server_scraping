@@ -7,7 +7,7 @@ from endpoints.creadores import creadores_bp
 from utils.database_utils import verificar_y_guardar_creadores, nombres_creadores 
 from endpoints.filtros.sortbyname import sortbyname_bp
 from endpoints.filtros.sortbycat import sortbycat_bp
-
+from endpoints.filtros.promocionados import promocionados_bp
 app = Flask(__name__)
 CORS(app)
 
@@ -28,6 +28,6 @@ app.register_blueprint(creadores_bp, url_prefix='', name='creadores_bp')
 app.register_blueprint(filtros_bp, url_prefix='/filtros', name='filtros_bp')
 app.register_blueprint(sortbyname_bp, url_prefix='/sortbyname')
 app.register_blueprint(sortbycat_bp, url_prefix='/sortbycat')
-
+app.register_blueprint(promocionados_bp, url_prefix='/')
 if __name__ == "__main__":
     app.run()

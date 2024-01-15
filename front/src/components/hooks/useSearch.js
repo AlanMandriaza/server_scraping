@@ -7,8 +7,9 @@ const useSearch = (fetchCreatorsByCategory) => {
   const [error, setError] = useState(null);
 
   const handleSearch = useCallback(async (query) => {
-    setLoading(true);
+    setLoading(true); 
     setError(null);
+   
     try {
       const encodedQuery = encodeURIComponent(query);
       if (encodedQuery) {
@@ -21,13 +22,14 @@ const useSearch = (fetchCreatorsByCategory) => {
         // Obtener nombres de categorías
         const categorias = data.categorias.map((categoria) => categoria);
 
-        // Obtener nombres de creadores
-        const creadores = data.creadores.map((creador) => creador.creador_id);
+        // Obtener nombres de creadores 
+        const creadores = data.creadores.map((creador) => ({ ...creador }));
+
 
         const suggestions = [...categorias, ...creadores];
         setSuggestions(suggestions);
       } else {
-        setSuggestions([]);
+        setSuggestions([]); 
       }
     } catch (error) {
       console.error('Error en la búsqueda:', error);
@@ -40,7 +42,8 @@ const useSearch = (fetchCreatorsByCategory) => {
   const handleSuggestionClick = async (suggestion) => {
     setLoading(true);
     setError(null);
-
+    setSuggestions([]); // Limpiar sugerencias
+    setSearchResults([]); 
     try {
       if (typeof suggestion === 'string') {
         // Si la sugerencia es una cadena, entonces es el nombre de la categoría.

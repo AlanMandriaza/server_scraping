@@ -5,92 +5,136 @@ import useSearch from './hooks/useSearch';
 import useTopLikes from './hooks/useTopLikes';
 import useCategories from './hooks/useCategories';
 import useCreatorsByCategory from './hooks/useCreatorsByCategory';
+import usePromotedCreators from './hooks/promoted';
+import '../styles/paginacion.css';
 
-const RESULTS_PER_PAGE = 10;
+const RESULTS_PER_PAGE = 20;
+const MAX_PAGES_SHOWN = 5;
 
 const MainPage = () => {
   const { creators, fetchCreatorsByCategory, error: errorCreators } = useCreatorsByCategory();
-
   const { searchResults, suggestions, loading: loadingSearch, error: errorSearch, handleSearch, handleSuggestionClick } = useSearch(fetchCreatorsByCategory);
-
   const { topLikesData, loading: loadingTopLikes, error: errorTopLikes, fetchTopLikes } = useTopLikes();
   const { categories, loading: loadingCategories, error: errorCategories, fetchCategories } = useCategories();
+  const { promotedData, loadingPromoted, errorPromoted, fetchPromotedCreators } = usePromotedCreators();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const MAX_PAGES_SHOWN = 5;
-  const [activeDataSet, setActiveDataSet] = useState('searchResults');
+  const [activeDataSet, setActiveDataSet] = useState('promoted');
+  const [selectedSuggestion, setSelectedSuggestion] = useState(null); // Agregar estado para la sugerencia seleccionada
 
-  // Función para manejar el clic en una categoría
+  useEffect(() => {
+    fetchCategories();
+    fetchPromotedCreators(currentPage);
+  }, [fetchCategories, fetchPromotedCreators, currentPage]);
+
   const handleCategoryClick = useCallback(async (categoryName) => {
     try {
-      // Llama al hook de la categoría para obtener los creadores de la categoría seleccionada
       await fetchCreatorsByCategory(categoryName);
       setActiveDataSet('category');
-      console.log('Successfully fetched creators for category:', categoryName);
+      setSelectedSuggestion(null); // Limpiar la sugerencia seleccionada al cambiar de categoría
     } catch (error) {
       console.error('Error fetching creators for category:', error);
     }
   }, [fetchCreatorsByCategory]);
 
-  useEffect(() => {
-    // Fetch de categorías
-    fetchCategories()
-      .then((data) => {
-        console.log('Datos de categorías:', data);
-      })
-      .catch((error) => {
-        console.error('Error al obtener categorías:', error);
-      });
-  }, [fetchCategories]);
-
-  useEffect(() => {
-    if (activeDataSet === 'searchResults') {
-      setTotalPages(Math.ceil(searchResults.length / RESULTS_PER_PAGE));
-    } else if (activeDataSet === 'topLikes') {
-      setTotalPages(topLikesData.total_paginas || 0);
-    }
-  }, [searchResults, topLikesData, activeDataSet]);
-
-  const handleTopLikesClick = () => {
-    fetchTopLikes(currentPage);
+  const handleTopLikesClick = useCallback(() => {
     setActiveDataSet('topLikes');
-  };
+    fetchTopLikes(currentPage);
+    setSelectedSuggestion(null); // Limpiar la sugerencia seleccionada al hacer clic en "Top Likes"
+  }, [fetchTopLikes, currentPage]);
+
+  const handleNewSearch = useCallback((query) => {
+    setActiveDataSet('searchResults');
+    handleSearch(query);
+    setSelectedSuggestion(null); // Limpiar la sugerencia seleccionada al realizar una nueva búsqueda
+  }, [searchResults, suggestions]);
 
   useEffect(() => {
-    if (activeDataSet === 'topLikes') {
-      fetchTopLikes(currentPage);
+    let dataLength = 0;
+    switch (activeDataSet) {
+      case 'searchResults':
+        dataLength = searchResults.length;
+        break;
+      case 'topLikes':
+        dataLength = topLikesData.total_paginas * RESULTS_PER_PAGE;
+        break;
+      case 'category':
+        dataLength = creators.length;
+        break;
+      case 'promoted':
+        dataLength = promotedData.total_paginas * RESULTS_PER_PAGE;
+        break;
+      default:
+        break;
     }
-  }, [currentPage, activeDataSet, fetchTopLikes]);
+    setTotalPages(Math.ceil(dataLength / RESULTS_PER_PAGE));
+  }, [searchResults, topLikesData, creators, promotedData, activeDataSet]);
 
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
+  const handlePageChange = useCallback((newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (activeDataSet === 'topLikes') {
+        fetchTopLikes(newPage);
+      } else if (activeDataSet === 'promoted') {
+        fetchPromotedCreators(newPage);
+      }
+    }
+  }, [totalPages, activeDataSet, fetchTopLikes, fetchPromotedCreators]);
+
+  const renderContent = () => {
+    let dataToShow = [];
+    switch (activeDataSet) {
+      case 'searchResults':
+        dataToShow = searchResults || []; // Verificar si searchResults es undefined
+        break;
+      case 'topLikes':
+        dataToShow = topLikesData?.creadores || []; // Verificar si topLikesData o creadores son undefined
+        break;
+      case 'category':
+        dataToShow = creators || []; // Verificar si creators es undefined
+        break;
+      case 'promoted':
+        dataToShow = promotedData?.creadores || []; // Verificar si promotedData o creadores son undefined
+        break;
+      default:
+        break;
+    }
+
+    // Ahora puedes usar .slice con dataToShow
+    return dataToShow.slice((currentPage - 1) * RESULTS_PER_PAGE, currentPage * RESULTS_PER_PAGE).map((creador, index) => (
+      <CreadorCard key={index} creador={creador} />
+    ));
   };
 
-  const paginationButtons = [];
-  for (let i = Math.max(1, currentPage - Math.floor(MAX_PAGES_SHOWN / 2)); i <= Math.min(totalPages, currentPage + MAX_PAGES_SHOWN - 1); i++) {
-    paginationButtons.push(
-      <button key={i} onClick={() => handlePageChange(i)} className={`page-button ${currentPage === i ? 'active' : ''}`}>
-        {i}
-      </button>
-    );
-  }
-
-  const canGoPrev = currentPage > 1;
-  const canGoNext = currentPage < totalPages;
+  let paginationContent = totalPages > 1 ? (
+    <div className="pagination">
+      {currentPage > 1 && <button onClick={() => handlePageChange(currentPage - 1)} className="prev-button">Prev</button>}
+      {Array.from({ length: totalPages }, (_, i) => i + 1)
+        .slice(Math.max(0, currentPage - Math.floor(MAX_PAGES_SHOWN / 2)), Math.min(currentPage + Math.floor(MAX_PAGES_SHOWN / 2), totalPages))
+        .map(page => (
+          <button key={page} onClick={() => handlePageChange(page)} className={`page-button ${currentPage === page ? 'active' : ''}`}>
+            {page}
+          </button>
+        ))
+      }
+      {currentPage < totalPages && <button onClick={() => handlePageChange(currentPage + 1)} className="next-button">Next</button>}
+    </div>
+  ) : null;
 
   return (
     <div className="main-page">
       <Navbar
-        onSearch={(query) => {
-          handleSearch(query);
-          setActiveDataSet('searchResults');
-        }}
+        onSearch={handleNewSearch}
         onTopLikes={handleTopLikesClick}
         suggestions={suggestions}
-        handleSuggestionClick={handleSuggestionClick}
+        handleSuggestionClick={(suggestion) => {
+          setSelectedSuggestion(suggestion); // Actualizar la sugerencia seleccionada al hacer clic en ella
+          handleSuggestionClick(suggestion);
+        }}
         categories={categories}
-        onCategoryClick={handleCategoryClick} // Pasa la función de manejo de clic a Navbar
+        onCategoryClick={handleCategoryClick}
       />
       <div className="loading-and-error">
         {loadingSearch && <p className="loading-message">Cargando búsqueda...</p>}
@@ -99,24 +143,13 @@ const MainPage = () => {
         {errorTopLikes && <p className="error-message">{errorTopLikes}</p>}
         {loadingCategories && <p className="loading-message">Cargando categorías...</p>}
         {errorCategories && <p className="error-message">{errorCategories}</p>}
-        {errorCreators && <p className="error-message">{errorCreators}</p>}
+        {loadingPromoted && <p className="loading-message">Cargando creadores promocionados...</p>}
+        {errorPromoted && <p className="error-message">{errorPromoted}</p>}
       </div>
       <div className="content">
-        {activeDataSet === 'searchResults' && searchResults.map((creador, index) => (
-          <CreadorCard key={index} creador={creador} className="creador-card" />
-        ))}
-        {activeDataSet === 'topLikes' && topLikesData.creadores?.map((creador, index) => (
-          <CreadorCard key={index} creador={creador} className="creador-card" />
-        ))}
-        {activeDataSet === 'category' && creators.map((creador, index) => (
-          <CreadorCard key={index} creador={creador} className="creador-card" />
-        ))}
+        {renderContent()}
       </div>
-      <div className="pagination">
-        {canGoPrev && <button onClick={() => handlePageChange(currentPage - 1)} className="prev-button">Prev</button>}
-        {paginationButtons}
-        {canGoNext && <button onClick={() => handlePageChange(currentPage + 1)} className="next-button">Next</button>}
-      </div>
+      {paginationContent}
     </div>
   );
 };

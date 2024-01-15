@@ -5,10 +5,19 @@ const Navbar = ({ onSearch, onTopLikes, suggestions, handleSuggestionClick, cate
   const [searchQuery, setSearchQuery] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null); // Un solo ref para el dropdown
+  const topLikesRef = useRef(null); // Ref para el botón "Top Likes"
 
   const handleInputChange = (e) => {
     setSearchQuery(e.target.value);
     onSearch(e.target.value);
+  };
+
+  // Función para hacer scroll al principio y llamar a onTopLikes
+  const handleTopLikesClick = () => {
+    if (topLikesRef.current) {
+      topLikesRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+    onTopLikes(); 
   };
 
   useEffect(() => {
@@ -37,31 +46,26 @@ const Navbar = ({ onSearch, onTopLikes, suggestions, handleSuggestionClick, cate
             className="search-input"
           />
           {suggestions.length > 0 && (
-
             <div className="suggestions-list" ref={dropdownRef}>
-          {suggestions.map((suggestion, index) => (
-  <div key={index} onClick={() => {
-    if (typeof suggestion === 'string') {
-      console.log("Category clicked:", suggestion);
-      onCategoryClick(suggestion);
-    } else if (suggestion && suggestion.creador_id) {
-      console.log("Suggestion clicked:", suggestion);
-      handleSuggestionClick(suggestion);
-    }
-  }}>
-    {typeof suggestion === 'string' ? suggestion : suggestion.name}
-  </div>
-))}
-
-
-
+              {suggestions.map((suggestion, index) => (
+                <div key={index} onClick={() => {
+                  if (suggestion.tipo === 'categoria') {
+                    console.log("Category clicked:", suggestion.nombre);
+                    onCategoryClick(suggestion.nombre);
+                  } else if (suggestion.tipo === 'creador') {
+                    console.log("Creator clicked:", suggestion);
+                    handleSuggestionClick(suggestion);
+                  }
+                }}>
+                  {suggestion.tipo === 'creador' ? suggestion.creador_id : suggestion.nombre}
+                </div>
+              ))}
             </div>
-
           )}
-
         </div>
         <div className="navbar-links">
-          <button onClick={onTopLikes} className="likes-button">
+          {/* Botón "Top Likes" con referencia para hacer scroll */}
+          <button onClick={handleTopLikesClick} className="likes-button" ref={topLikesRef}>
             Top Likes
           </button>
           <button onClick={() => setShowDropdown(!showDropdown)} className="categories-button">
@@ -76,7 +80,6 @@ const Navbar = ({ onSearch, onTopLikes, suggestions, handleSuggestionClick, cate
               ))}
             </div>
           )}
-
         </div>
       </div>
     </div>
