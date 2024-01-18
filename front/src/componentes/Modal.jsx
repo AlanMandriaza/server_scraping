@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import '../styles/loading.css';
+import './styles/loading.css';
 
 const Modal = ({ showModal, setShowModal, selectedImage }) => {
   const [imageLoading, setImageLoading] = useState(true);

@@ -5,8 +5,8 @@ import {
 } from 'react-icons/fa';
 import { BsCameraVideo, BsImages } from 'react-icons/bs';
 import Modal from './Modal';
-import '../styles/creadores.css';
-import '../styles/modal.css';
+import './styles/creadores.css';
+import './styles/modal.css';
 const CreadorCard = ({ creador }) => {
   const [showBio, setShowBio] = useState(false);
   const categoriasAsociadasArray = (creador.categorias_asociadas);
