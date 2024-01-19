@@ -1,13 +1,11 @@
-/* Estilos globales */
+
 body {
   margin: 0;
   font-family: 'Arial', sans-serif;
 }
-
-/* Estilos para la barra de navegación */
 .navbar {
-  background-color: rgba(50, 50, 50, 0.7);
-  backdrop-filter: blur(10px);
+  background-color: rgba(100, 100, 100, 0.6); 
+  backdrop-filter: blur(5px); 
   padding: 10px 0;
   position: fixed;
   top: 0;
@@ -15,15 +13,13 @@ body {
   width: 100%;
   z-index: 1500;
   box-sizing: border-box;
-  border-bottom: 1px solid rgba(200, 200, 200, 0.3);
-  transition: all 0.3s ease-in-out;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  transition: background-color 0.3s ease-in-out, box-shadow 0.2s ease-in-out;
 }
-
 .navbar:hover {
-  background-color: rgba(45, 45, 45, 0.8);
-  box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.3);
+  background-color: rgba(100, 100, 100, 0.8); 
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); 
 }
-
 .navbar-container {
   display: flex;
   justify-content: space-between;
@@ -32,19 +28,16 @@ body {
   margin: 0 auto;
   padding: 0 20px;
 }
-
 .navbar-logo {
-  color: #e0e0e0;
+  color: #fff;
   font-size: 24px;
 }
-
 .search-container,
 .navbar-links {
   display: flex;
   align-items: center;
   position: relative;
 }
-
 .search-container input,
 .navbar-links button {
   padding: 10px;
@@ -52,82 +45,82 @@ body {
   border-radius: 3px;
   margin-right: 5px;
   flex-grow: 1;
-}
-
-.search-container button,
-.navbar-links button,
-.categories-button {
-  padding: 10px;
-  margin-left: 10px;
-  background-color: #e0e0e0;
+  background-color: rgba(255, 255, 255, 0.5); 
   color: #333;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s; /* Animación suave */
+  transition: background-color 0.3s, transform 0.3s; 
 }
 
-.search-container button:hover,
-.navbar-links button:hover,
-.categories-button:hover {
-  background-color: #c0c0c0;
-  color: white;
+.search-container input:focus,
+.navbar-links button:hover {
+  background-color: #6b6b6b;
 }
 
-/* Estilos para la lista de sugerencias y el menú desplegable de categorías */
 .suggestions-list,
 .categories-dropdown {
   display: none;
   position: absolute;
-  top: calc(100%);
-  left: 51;
-  background-color: white;
+  top: calc(100% + 5px);
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.9); 
   border: 1px solid #ddd;
   border-radius: 4px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   z-index: 1000;
   overflow-y: auto;
   max-height: 196px;
-  animation: slideDown 0.5s ease forwards;
+  animation: slideDown 0.3s ease-in-out forwards;
 }
 
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Muestra las sugerencias y el menú desplegable al interactuar */
 .search-container input:focus + .suggestions-list,
 .suggestions-list:hover,
-.navbar-links:hover .categories-dropdown,
+.navbar-links button:focus + .categories-dropdown,
 .categories-dropdown:hover {
   display: block;
 }
-
 .suggestions-list div,
 .categories-dropdown div {
-  padding: 7px;
+  padding: 10px;
   cursor: pointer;
   transition: background-color 0.2s;
 }
-
 .suggestions-list div:hover,
 .categories-dropdown div:hover {
-  background-color: #f8f8f8;
+  background-color: #6b6b6b;
 }
 
-/* Estilos para el contenido principal debajo de la barra de navegación */
 .main-content {
-  margin-top: 58px;
+  margin-top: 60px;
 }
-
 .categories-button::after {
   content: '▼';
   margin-left: 5px;
 }
+.logo{
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin-top: -9px;
+  margin-bottom: -26px;
+}
+.navbar-logo img {
+  border: 2px solid transparent; 
+  width: 70px;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  opacity: 0.8;
+}
+
+.navbar-logo:hover img {
+  transform: scale(1.1); 
+  opacity: 1; 
+  border-color: rgba(49, 49, 49, 0.7); 
+}
+
+.top-likes-link {
+  
+  color: #333; 
+  text-decoration: none; 
+  display: inline-block; 
+  border-radius: 3px; 
+  transition: background-color 0.3s, color 0.3s;
+}
+

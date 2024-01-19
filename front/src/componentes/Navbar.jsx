@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom'; // Importa Link desde react-router-dom
-import './styles/navbar.css';  
+import { useNavigate, Link } from 'react-router-dom';
+import './styles/navbar.css';
+import useSearch from './hooks/useSearch';
+import logoImage from './logofinal.jpg';
 
 const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -8,6 +10,7 @@ const Navbar = () => {
   const [categories, setCategories] = useState([]);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+  const { suggestions, handleSearch } = useSearch(); 
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -36,21 +39,30 @@ const Navbar = () => {
     };
   }, []);
 
-  const handleCategorySelect = (categoryName) => {
-    navigate(`/categorias/${categoryName}`);
-    setShowDropdown(false);
-  };
-
   const handleInputChange = (e) => {
     setSearchQuery(e.target.value);
-    // Placeholder for search functionality
+    handleSearch(e.target.value);
+  };
+
+  const onSuggestionClick = (suggestion) => {
+    setShowDropdown(false);
+    if (suggestion.tipo === 'categoria') {
+      navigate(`/categorias/${suggestion.nombre}`);
+    } else if (suggestion.tipo === 'creador') {
+      navigate(`/creadores/${suggestion.creador_id}`);
+    }
+  };
+  const onCategoryClick = (categoryName) => {
+    navigate(`/categorias/${categoryName}`);
+    setShowDropdown(false);
   };
 
   return (
     <div className="navbar">
       <div className="navbar-container">
-        {/* Agrega el enlace al logo */}
-        <Link to="/" className="navbar-logo">Logo</Link>
+      <Link to="/" className="navbar-logo">
+          <img className="logo"src={logoImage} alt="Logo" /> 
+        </Link>
         <div className="search-container">
           <input
             type="text"
@@ -59,7 +71,15 @@ const Navbar = () => {
             placeholder="Search..."
             className="search-input"
           />
-          {/* Placeholder for search suggestions */}
+          {suggestions && suggestions.length > 0 && (
+            <div className="suggestions-list" ref={dropdownRef}>
+              {suggestions.map((suggestion, index) => (
+                <div key={index} onClick={() => onSuggestionClick(suggestion)}>
+                  {suggestion.tipo === 'creador' ? suggestion.creador_id : suggestion.nombre}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         <div className="navbar-links">
           <button onClick={() => setShowDropdown(!showDropdown)} className="categories-button">
@@ -68,13 +88,15 @@ const Navbar = () => {
           {showDropdown && (
             <div className="categories-dropdown" ref={dropdownRef}>
               {categories.map((category, index) => (
-                <div key={index} onClick={() => handleCategorySelect(category.nombre)}>
-                  {category.nombre} ({category.asociaciones})
+                <div key={index} onClick={() => onCategoryClick(category.nombre)}>
+                  {category.nombre}
                 </div>
               ))}
             </div>
           )}
-          {/* Placeholder for other buttons */}
+          <button>
+          <Link to="/top-likes" className="top-likes-link stylish-button">Top Likes</Link>
+          </button>
         </div>
       </div>
     </div>

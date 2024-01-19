@@ -19,7 +19,7 @@ class Creador(Base):
 
     creador_id = Column(String(50), primary_key=True, index=True, unique=True, nullable=False)
     nombre = Column(String(100), index=True)
-    pais = Column(String(50), index=True)
+    pais = Column(String(250), index=True)
     biografia = Column(String(1000))
     categorias_asociadas = Column(JSON, default=list)
     precio_suscripcion = Column(String(50))
