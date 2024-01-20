@@ -1,22 +1,31 @@
 import React, { useState } from 'react';
 import {
   FaPhotoVideo, FaCheck, FaFacebook, FaTwitter, FaHeart,
-  FaInstagram, FaMapMarker, FaTiktok, FaSnapchat,FaYoutube, FaAmazon
+  FaInstagram, FaMapMarker, FaTiktok, FaSnapchat, FaYoutube, FaAmazon
 } from 'react-icons/fa';
 import { BsCameraVideo, BsImages } from 'react-icons/bs';
 import Modal from './Modal';
 import './styles/creadores.css';
 import './styles/modal.css';
+
 const CreadorCard = ({ creador }) => {
   const [showBio, setShowBio] = useState(false);
-  const categoriasAsociadasArray = (creador.categorias_asociadas);
+  const categoriasAsociadasArray = creador.categorias_asociadas;
   const [showModal, setShowModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [isBioExpanded, setIsBioExpanded] = useState(false);
+
   const toggleBio = () => {
-    setShowBio(prev => !prev);
+    setIsBioExpanded(!isBioExpanded);
   };
+
   const handleImageClick = (image) => {
     setSelectedImage(image);
+    setShowModal(true);
+  };
+
+  const handleBioImageClick = () => {
+    setSelectedImage(`/images/${creador.creador_id}/${creador.creador_id}_bio.jpg`);
     setShowModal(true);
   };
 
@@ -32,7 +41,7 @@ const CreadorCard = ({ creador }) => {
       default: return null;
     }
   };
-  
+
   const getVideoIcon = () => <BsCameraVideo className="video-icon" />;
   const getStreamIcon = () => <FaPhotoVideo className="stream-icon" />;
   const getPhotoIcon = () => <BsImages className="photo-icon" />;
@@ -61,6 +70,7 @@ const CreadorCard = ({ creador }) => {
                 src={`/images/${creador.creador_id}/${creador.creador_id}_bio.jpg`}
                 alt={`${creador.nombre} Biography`}
                 className={`bio-image ${showBio ? '' : 'hide-on-mobile'}`}
+                onClick={handleBioImageClick}
               />
               <img
                 src={`/images/${creador.creador_id}/${creador.creador_id}.jpg`}
@@ -68,19 +78,21 @@ const CreadorCard = ({ creador }) => {
                 onClick={() => handleImageClick(`/images/${creador.creador_id}/${creador.creador_id}_hd.jpg`)}
                 className="avatar-image"
               />
-              <p className={`bio-text ${showBio ? '' : 'hide-on-mobile'}`}>{creador.biografia}</p>
+              <p className={`bio-text ${isBioExpanded ? 'expanded' : 'collapsed'}`}>
+                {creador.biografia.length > 400 ? (
+                  isBioExpanded ? creador.biografia : `${creador.biografia.slice(0, 400)}...`
+                ) : (
+                  creador.biografia
+                )}
+              </p>
 
-              <button
-                onClick={() => window.open(`https://onlyfans.com/${creador.creador_id}`, '_blank', 'noopener,noreferrer')}
-                className="subscription-button"
-              >
-                {getSubscriptionIcon()}
-              </button>
-
-              <button onClick={toggleBio} className={`show-bio-button ${showBio ? 'active' : ''}`}>
-                {getPhotoIcon()} Show Bio
-              </button>
+              {creador.biografia.length > 200 && (
+                <button onClick={toggleBio} className="show-more-button">
+                  {isBioExpanded ? 'Show Less' : 'Show More'}
+                </button>
+              )}
             </div>
+           
           </div>
         </div>
 
@@ -124,6 +136,11 @@ const CreadorCard = ({ creador }) => {
               {getStreamIcon()} {creador.streams}
             </div>
           )}
+          {creador.fans !== undefined && creador.fans !== null && parseFloat(creador.fans) !== 0 && (
+            <div className="fans">
+              Fans: {parseFloat(creador.fans).toLocaleString()}
+            </div>
+          )}
         </div>
         <div className='tags-container'>
           {categoriasAsociadasArray && Array.isArray(categoriasAsociadasArray) && categoriasAsociadasArray.length > 0 && (
@@ -137,7 +154,8 @@ const CreadorCard = ({ creador }) => {
             </div>
           )}
         </div>
-      </div> <Modal 
+      </div>
+      <Modal 
         showModal={showModal} 
         setShowModal={setShowModal} 
         selectedImage={selectedImage} 

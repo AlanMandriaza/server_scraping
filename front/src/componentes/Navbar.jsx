@@ -10,7 +10,7 @@ const Navbar = () => {
   const [categories, setCategories] = useState([]);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
-  const { suggestions, handleSearch } = useSearch(); 
+  const { suggestions, handleSearch } = useSearch();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -60,8 +60,8 @@ const Navbar = () => {
   return (
     <div className="navbar">
       <div className="navbar-container">
-      <Link to="/" className="navbar-logo">
-          <img className="logo"src={logoImage} alt="Logo" /> 
+        <Link to="/" className="navbar-logo">
+          <img className="logo" src={logoImage} alt="Logo" />
         </Link>
         <div className="search-container">
           <input
@@ -86,16 +86,18 @@ const Navbar = () => {
             Categories
           </button>
           {showDropdown && (
-            <div className="categories-dropdown" ref={dropdownRef}>
-              {categories.map((category, index) => (
-                <div key={index} onClick={() => onCategoryClick(category.nombre)}>
-                  {category.nombre}
-                </div>
-              ))}
+          <div className="categories-dropdown" ref={dropdownRef}>
+          {categories.map((category, index) => (
+            <div key={index} onClick={() => onCategoryClick(category.nombre)}>
+              <span className="category-name">{category.nombre}</span>
+              <span className="category-associations"> ({category.asociaciones})</span>
             </div>
+          ))}
+        </div>
+        
           )}
           <button>
-          <Link to="/top-likes" className="top-likes-link stylish-button">Top Likes</Link>
+            <Link to="/top-likes" className="top-likes-link stylish-button">Top Likes</Link>
           </button>
         </div>
       </div>

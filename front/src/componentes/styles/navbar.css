@@ -52,7 +52,7 @@ body {
 
 .search-container input:focus,
 .navbar-links button:hover {
-  background-color: #6b6b6b;
+  background-color: #dfdfdf;
 }
 
 .suggestions-list,

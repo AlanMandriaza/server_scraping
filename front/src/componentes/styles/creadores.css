@@ -1,6 +1,7 @@
 .content {
   margin-top: 67px;
 }
+
 .creador-card {
   display: flex;
   width: 65%;
@@ -13,10 +14,12 @@
   background-color: #f7f7f7;
   height: 100%;
 }
+
 .avatar-container {
   flex: 0 0 150px;
   position: relative;
 }
+
 .avatar-image {
   width: 100px;
   height: 100px;
@@ -26,21 +29,24 @@
   border: 3px solid #ffffff;
   transition: transform 0.3s ease;
 }
+
 .avatar-image:hover {
   transform: scale(1.1);
   border: 3px solid #f7f7f7;
   cursor: pointer;
-  
 }
+
 .creador-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
+
 .creador-header {
   padding: 10px;
 }
+
 .creador-title {
   font-size: 18px;
   margin: 0;
@@ -52,7 +58,7 @@
 }
 
 .bio-container {
-  background-color:  #f7f7f7;
+  background-color: #f7f7f7;
   padding: 5px;
   border-radius: 4px;
 }
@@ -73,6 +79,7 @@
   display: flex;
   justify-content: space-around;
 }
+
 .subscription-button, .show-bio-button {
   border: none;
   background-color: #a0a0a0; 
@@ -91,7 +98,6 @@
 
 .subscription-button:hover, .show-bio-button:hover {
   background-color: #575757; 
-  
 }
 
 .creador-stats {
@@ -103,27 +109,27 @@
   color: #000;
   margin-left: -15px;
   margin-bottom: -17px;
-  
 }
 
-.social-icon, .video-icon, .stream-icon, .photo-icon, .likes-icon, .location-icon {
+.social-icon, .video-icon, .stream-icon, .photo-icon, .likes-icon, .location-icon, .fans-icon {
   margin-right: 5px;
 }
 
-.likes, .pais, .videos, .fotos, .suscripciones, .streams {
+.likes, .pais, .videos, .fotos, .suscripciones, .streams, .fans {
   display: flex;
   align-items: center;
   padding-left: 15px;
 }
 
 .tags-container {
- 
   margin-bottom: 25px;
   margin-left: 13px;
 }
-.tags-titulo{
+
+.tags-titulo {
   margin-bottom: 9px;
 }
+
 .categorias-lista {
   list-style-type: none;
   padding: 0;
@@ -149,65 +155,83 @@
   object-fit: cover;
   margin-bottom: 15px;
 }
-.show-bio-button{
-  display: none;
+
+/* Handling Long Text */
+.bio-text, .creador-title {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
-.social-icon {
-  color: black; 
-  transition: transform 0.3s ease, color 0.3s ease; 
+
+/* Basic Mobile Responsiveness */
+@media (max-width: 768px) {
+    .creador-card {
+        flex-direction: column;
+        width: 90%;
+        margin-left: 5%;
+        margin-top: 20px;
+    }
+
+    .avatar-container {
+        flex: 0 0 auto;
+        margin: 0 auto;
+    }
+
+    .avatar-image {
+        margin-top: 15px;
+        margin-left: 0;
+    }
+
+    .bio-text {
+        margin-left: 10px;
+        margin-top: 10px;
+    }
+
+    .creador-content {
+        flex-direction: column;
+    }
+
+    .creador-header {
+        text-align: center;
+    }
+
+    .creador-stats, .tags-container, .redes-sociales {
+        justify-content: center;
+        margin-left: 0;
+    }
+
+    .categorias-lista {
+        justify-content: center;
+    }
+
+    .bio-image {
+        width: 90%;
+        margin: 10px auto;
+    }
+
+    .subscription-button, .show-bio-button {
+        min-width: 90%;
+        margin: 10px auto;
+    }
 }
 
 
-.social-icon:hover {
-  transform: scale(1.1); 
-  color: #555; 
+@media (max-width: 480px) {
+    .creador-title {
+        font-size: 16px;
+    }
+
+    .bio-text {
+        font-size: 13px;
+    }
+}
+.category-name {
+ 
+  font-weight: bold;
+  color: #333;
 }
 
-.social-icon.facebook {
-  color: #3b5998;
-}
+.category-associations {
 
-.social-icon.twitter {
-  color: #1DA1F2; 
-}
-
-.social-icon.instagram {
-  background: radial-gradient(circle farthest-corner at 35% 90%, #fec564, transparent 50%), 
-              radial-gradient(circle farthest-corner at 0 140%, #fec564, transparent 50%), 
-              radial-gradient(ellipse farthest-corner at 0 -25%, #5258cf, transparent 50%), 
-              radial-gradient(ellipse farthest-corner at 20% -50%, #5258cf, transparent 50%), 
-              radial-gradient(ellipse farthest-corner at 100% 0, #893dc2, transparent 50%), 
-              radial-gradient(ellipse farthest-corner at 60% -20%, #893dc2, transparent 50%), 
-              radial-gradient(ellipse farthest-corner at 100% 100%, #d9317a, transparent), 
-              radial-gradient(ellipse farthest-corner at 60% 100%, #d9317a, transparent);
-  color: white;
-  border-radius: 26%; 
-}
-
-.social-icon.tiktok {
-  color: #000000;
-}
-
-.social-icon.snapchat {
-  border-radius: 50%; 
-  transition: transform 0.3s ease, border-color 0.3s ease;
-}
-
-.social-icon:hover {
-  transform: scale(1.1);
-}
-
-.social-icon {
-  font-size: 26px;
-}
-.redes-sociales{
-  margin-left: 31px;
-}
-.social-icon.amazon {
-  font-size: 26px; 
-  color: #FF9900; 
-}
-.social-icon.youtube {
-  font-size: 26px; 
-  color: #FF0000; 
+  color: #999;
+  font-size: 0.8em;
 }
