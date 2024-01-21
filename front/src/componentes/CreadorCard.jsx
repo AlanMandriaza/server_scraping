@@ -7,6 +7,10 @@ import { BsCameraVideo, BsImages } from 'react-icons/bs';
 import Modal from './Modal';
 import './styles/creadores.css';
 import './styles/modal.css';
+import './styles/creadormobile.css'
+import './styles/iconos.css'
+
+
 
 const CreadorCard = ({ creador }) => {
   const [showBio, setShowBio] = useState(false);
@@ -83,16 +87,21 @@ const CreadorCard = ({ creador }) => {
                   isBioExpanded ? creador.biografia : `${creador.biografia.slice(0, 400)}...`
                 ) : (
                   creador.biografia
+                )}  {creador.biografia.length > 400 && (
+                  <button onClick={toggleBio} className="show-more-button">
+                    {isBioExpanded ? 'Show Less' : 'Show More'}
+                  </button>
                 )}
               </p>
+              <button
+                onClick={() => window.open(`https://onlyfans.com/${creador.creador_id}`, '_blank', 'noopener,noreferrer')}
+                className="subscription-button"
+              >
+                {getSubscriptionIcon()}
+              </button>
 
-              {creador.biografia.length > 200 && (
-                <button onClick={toggleBio} className="show-more-button">
-                  {isBioExpanded ? 'Show Less' : 'Show More'}
-                </button>
-              )}
             </div>
-           
+
           </div>
         </div>
 
@@ -145,20 +154,20 @@ const CreadorCard = ({ creador }) => {
         <div className='tags-container'>
           {categoriasAsociadasArray && Array.isArray(categoriasAsociadasArray) && categoriasAsociadasArray.length > 0 && (
             <div>
-              <h4 className='tags-titulo'>Tags:</h4>
+              <h4 className='tags-  '>Tags:</h4>
               <ul className="categorias-lista">
                 {categoriasAsociadasArray.map((categoria, index) => (
-                  <li key={index}>{categoria}</li>
+                  <li key={index} className="tags-li">{categoria}</li>
                 ))}
               </ul>
             </div>
           )}
         </div>
       </div>
-      <Modal 
-        showModal={showModal} 
-        setShowModal={setShowModal} 
-        selectedImage={selectedImage} 
+      <Modal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        selectedImage={selectedImage}
       />
     </li>
   );

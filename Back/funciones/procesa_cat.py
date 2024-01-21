@@ -3,6 +3,7 @@ import os
 from sqlalchemy.orm import joinedload
 from sqlalchemy import func
 import json
+
 # Obtener la ruta del directorio actual del script
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -17,7 +18,10 @@ from models.main import Categoria, CreadorCategoriaAssociation, Creador, Session
 def normalizar_texto(texto):
     return texto.replace('/', '')
 
-def procesar_categorias(session, creador):
+def obtener_cantidad_total_creadores(session):
+    return session.query(Creador).count()
+
+def procesar_categorias(session, creador, numero_creador, cantidad_total):
     """
     Procesa y asocia categorías a un creador basado en su biografía.
     """
@@ -57,6 +61,13 @@ def procesar_categorias(session, creador):
         # Asignar la lista directamente a la columna JSON
         creador.categorias_asociadas = nuevas_categorias_asociadas
 
+        # Calcular el porcentaje de progreso
+        porcentaje_progreso = (numero_creador / cantidad_total) * 100
+
+        # Mostrar solo el porcentaje de progreso
+        sys.stdout.write("\rProgreso: %.2f%%" % porcentaje_progreso)
+        sys.stdout.flush()
+
 # Obtener la ruta del directorio actual del script
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -69,11 +80,16 @@ sys.path.append(parent_dir)
 # Lógica principal
 if __name__ == "__main__":
     with Session() as session:
+        cantidad_total_creadores = obtener_cantidad_total_creadores(session)
         creadores = session.query(Creador).all()
+        numero_creador = 0  # Inicializa el número de creador
 
         for creador in creadores:
-            procesar_categorias(session, creador)
+            numero_creador += 1  # Incrementa el número de creador en cada iteración
+            procesar_categorias(session, creador, numero_creador, cantidad_total_creadores)
+
+        # Imprime una línea en blanco para separar el progreso
+        print()
 
         # Guardar los cambios en la base de datos
         session.commit()
-

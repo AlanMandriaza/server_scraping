@@ -1,0 +1,104 @@
+.creador-stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  font-size: 14px;
+  margin-top: 7px;
+  color: #000;
+  margin-left: 15px;
+  margin-bottom: -17px;
+  
+}
+.redes-sociales{
+  margin-right: 15px;
+}
+ /* Estilos de los iconos */
+.social-icon {
+  font-size: 26px;
+  color: black;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.social-icon:hover {
+  transform: scale(1.1);
+  color: #555;
+}
+
+.social-icon.facebook {
+  color: #3b5998;
+}
+
+.social-icon.twitter {
+  color: #1DA1F2;
+}
+
+.social-icon.instagram {
+  background: radial-gradient(circle farthest-corner at 35% 90%, #fec564, transparent 50%),
+    radial-gradient(circle farthest-corner at 0 140%, #fec564, transparent 50%),
+    radial-gradient(ellipse farthest-corner at 0 -25%, #5258cf, transparent 50%),
+    radial-gradient(ellipse farthest-corner at 20% -50%, #5258cf, transparent 50%),
+    radial-gradient(ellipse farthest-corner at 100% 0, #893dc2, transparent 50%),
+    radial-gradient(ellipse farthest-corner at 60% -20%, #893dc2, transparent 50%),
+    radial-gradient(ellipse farthest-corner at 100% 100%, #d9317a, transparent),
+    radial-gradient(ellipse farthest-corner at 60% 100%, #d9317a, transparent);
+  color: white;
+  border-radius: 26%;
+}
+
+.social-icon.tiktok {
+  color: #000000;
+}
+
+.social-icon.snapchat {
+  border-radius: 50%;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.social-icon:hover {
+  transform: scale(1.1);
+}
+
+.social-icon.amazon {
+  font-size: 26px;
+  color: #FF9900;
+}
+
+.social-icon.youtube {
+  font-size: 21px;
+  color: #FF0000;
+}
+.social-icon,
+.video-icon,
+.stream-icon,
+.photo-icon,
+.likes-icon,
+.location-icon {
+  margin-right: 5px;
+}
+
+.likes,
+.pais,
+.videos,
+.fotos,
+.suscripciones,
+.streams {
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+}
+.check-icon{
+  border: solid 1px;
+  border-radius: 17px;
+  margin-right: 7px;
+  padding: 1px;
+  color: rgb(8, 204, 8);
+}
+
+.verificado-x{
+  border: solid 1px;
+  border-radius: 10px;
+  margin-right: 7px;
+  padding: 1px;
+  color: red;
+  padding: 0px 4px 0px 4px;
+}

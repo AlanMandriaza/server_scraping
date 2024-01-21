@@ -100,27 +100,6 @@
   background-color: #575757; 
 }
 
-.creador-stats {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  font-size: 14px;
-  margin-top: 7px;
-  color: #000;
-  margin-left: -15px;
-  margin-bottom: -17px;
-}
-
-.social-icon, .video-icon, .stream-icon, .photo-icon, .likes-icon, .location-icon, .fans-icon {
-  margin-right: 5px;
-}
-
-.likes, .pais, .videos, .fotos, .suscripciones, .streams, .fans {
-  display: flex;
-  align-items: center;
-  padding-left: 15px;
-}
-
 .tags-container {
   margin-bottom: 25px;
   margin-left: 13px;
@@ -151,87 +130,30 @@
 .bio-image {
   width: 357px;
   height: 185px;
-  border-radius: 6%;
+  border-radius: 20px;
   object-fit: cover;
   margin-bottom: 15px;
 }
 
 /* Handling Long Text */
 .bio-text, .creador-title {
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-}
-
-/* Basic Mobile Responsiveness */
-@media (max-width: 768px) {
-    .creador-card {
-        flex-direction: column;
-        width: 90%;
-        margin-left: 5%;
-        margin-top: 20px;
-    }
-
-    .avatar-container {
-        flex: 0 0 auto;
-        margin: 0 auto;
-    }
-
-    .avatar-image {
-        margin-top: 15px;
-        margin-left: 0;
-    }
-
-    .bio-text {
-        margin-left: 10px;
-        margin-top: 10px;
-    }
-
-    .creador-content {
-        flex-direction: column;
-    }
-
-    .creador-header {
-        text-align: center;
-    }
-
-    .creador-stats, .tags-container, .redes-sociales {
-        justify-content: center;
-        margin-left: 0;
-    }
-
-    .categorias-lista {
-        justify-content: center;
-    }
-
-    .bio-image {
-        width: 90%;
-        margin: 10px auto;
-    }
-
-    .subscription-button, .show-bio-button {
-        min-width: 90%;
-        margin: 10px auto;
-    }
-}
-
-
-@media (max-width: 480px) {
-    .creador-title {
-        font-size: 16px;
-    }
-
-    .bio-text {
-        font-size: 13px;
-    }
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 .category-name {
- 
   font-weight: bold;
   color: #333;
 }
 
 .category-associations {
-
   color: #999;
   font-size: 0.8em;
+}
+.show-more-button {
+  margin-left: -6px;
+  background-color: transparent;
+  border: none; 
+  cursor: pointer; 
+  color: rgb(142, 142, 255);
+  margin-top: 5px;
 }

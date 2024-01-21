@@ -6,9 +6,11 @@ import logoImage from './logofinal.jpg';
 
 const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [categories, setCategories] = useState([]);
-  const dropdownRef = useRef(null);
+  const suggestionsRef = useRef(null);
+  const categoriesRef = useRef(null);
   const navigate = useNavigate();
   const { suggestions, handleSearch } = useSearch();
 
@@ -28,7 +30,10 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      if (suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
+        setShowSuggestions(false);
+      }
+      if (categoriesRef.current && !categoriesRef.current.contains(event.target)) {
         setShowDropdown(false);
       }
     };
@@ -41,20 +46,30 @@ const Navbar = () => {
 
   const handleInputChange = (e) => {
     setSearchQuery(e.target.value);
-    handleSearch(e.target.value);
+    if (e.target.value) {
+      setShowSuggestions(true);
+      handleSearch(e.target.value);
+    } else {
+      setShowSuggestions(false);
+    }
   };
 
   const onSuggestionClick = (suggestion) => {
-    setShowDropdown(false);
+    setShowSuggestions(false);
     if (suggestion.tipo === 'categoria') {
       navigate(`/categorias/${suggestion.nombre}`);
     } else if (suggestion.tipo === 'creador') {
       navigate(`/creadores/${suggestion.creador_id}`);
     }
   };
+
   const onCategoryClick = (categoryName) => {
     navigate(`/categorias/${categoryName}`);
     setShowDropdown(false);
+  };
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
   };
 
   return (
@@ -71,30 +86,39 @@ const Navbar = () => {
             placeholder="Search..."
             className="search-input"
           />
-          {suggestions && suggestions.length > 0 && (
-            <div className="suggestions-list" ref={dropdownRef}>
+          {showSuggestions && suggestions && suggestions.length > 0 && (
+            <div className="suggestions-list" ref={suggestionsRef}>
               {suggestions.map((suggestion, index) => (
                 <div key={index} onClick={() => onSuggestionClick(suggestion)}>
-                  {suggestion.tipo === 'creador' ? suggestion.creador_id : suggestion.nombre}
+                  {suggestion.tipo === 'creador' ? (
+                    <>
+                      <span>{suggestion.nombre}</span>
+                      <span> / {suggestion.creador_id}</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>{suggestion.nombre}</span>
+                      <span> ({suggestion.num_creadores_asociados})</span>
+                    </>
+                  )}
                 </div>
               ))}
             </div>
           )}
         </div>
         <div className="navbar-links">
-          <button onClick={() => setShowDropdown(!showDropdown)} className="categories-button">
+          <button onClick={toggleDropdown} className="categories-button">
             Categories
           </button>
           {showDropdown && (
-          <div className="categories-dropdown" ref={dropdownRef}>
-          {categories.map((category, index) => (
-            <div key={index} onClick={() => onCategoryClick(category.nombre)}>
-              <span className="category-name">{category.nombre}</span>
-              <span className="category-associations"> ({category.asociaciones})</span>
+            <div className="categories-dropdown" ref={categoriesRef}>
+              {categories.map((category, index) => (
+                <div key={index} onClick={() => onCategoryClick(category.nombre)}>
+                  <span className="category-name">{category.nombre}</span>
+                  <span className="category-associations"> ({category.asociaciones})</span>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        
           )}
           <button>
             <Link to="/top-likes" className="top-likes-link stylish-button">Top Likes</Link>

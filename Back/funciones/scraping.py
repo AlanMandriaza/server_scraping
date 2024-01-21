@@ -231,7 +231,7 @@ def procesar_creador(driver, creador_id, images_folder, session):
             for elemento in secciones_elements:
                 nombre_icono = elemento.find_element(By.CSS_SELECTOR, 'span.b-profile__sections__link.has-tooltip [data-icon-name]').get_attribute('data-icon-name')
                 count = elemento.find_element(By.CSS_SELECTOR, 'span.b-profile__sections__count').text.strip()
-                
+
                 if nombre_icono == 'icon-image':
                     fotos_count = count
                 elif nombre_icono == 'icon-video':
@@ -249,7 +249,6 @@ def procesar_creador(driver, creador_id, images_folder, session):
         logging.warning("No se encontraron elementos de secciones")
     except Exception as e:
         logging.error(f"Error al obtener las secciones: {e}")
-
 
     bio = obtener_valor(driver, '//*[@id="content"]/div[1]/div[1]/div/div[2]/div/div[2]/div[2]/div[1]/div/div/div/p')
     nombre = obtener_valor(driver, '//*[@id="content"]/div[1]/div[1]/div/div[2]/div/div[2]/div[1]/div[2]/div[1]/div/div')

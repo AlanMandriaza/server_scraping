@@ -1,0 +1,115 @@
+@media (max-width: 980px) {
+    .content {
+        margin-top: 67px !important;
+    }
+
+    .bio-text {
+        margin-bottom: 2px !important;
+        min-height: 52px !important;
+    }
+
+    .creador-card {
+        flex-direction: column !important;
+        width: 60% !important;
+
+        margin-top: 20px !important;
+    }
+
+    .avatar-container {
+        flex: 0 0 auto !important;
+        margin: 0 auto !important;
+    }
+
+    .avatar-image {
+        margin-top: -72px !important;
+        margin-left: 0 !important;
+    }
+
+    .bio-text {
+        margin-left: 10px !important;
+        margin-top: 10px !important;
+    }
+
+    .creador-content {
+        flex-direction: column !important;
+    }
+
+    .creador-header {
+        text-align: center !important;
+    }
+
+    .tags-container,
+    .redes-sociales {
+        justify-content: center !important;
+    }
+
+    .tags-container {
+        margin-left: 49px !important;
+    }
+
+    .tags-li {
+        margin-bottom: 3px;
+    }
+
+    .categorias-lista {
+        justify-content: flex-start !important;
+    }
+
+    .bio-image {
+        width: 90% !important;
+        margin: 10px auto !important;
+    }
+
+    .subscription-button,
+    .show-bio-button {
+        min-width: 30% !important;
+        margin: 10px auto !important;
+    }
+
+    .creador-title {
+        font-size: 16px !important;
+    }
+
+    .search-input {
+        width: 93px !important;
+    }
+
+    .bio-text {
+        font-size: 13px !important;
+    }
+
+    .creador-stats {
+        display: flex !important;
+        justify-content: space-between !important;
+        font-size: 14px !important;
+        margin-top: 7px !important;
+        color: #000 !important;
+        margin-left: 55px !important;
+        margin-right: 50px !important;
+    }
+
+    .creador-title {
+        padding-top: 3px;
+        border: 1px solid;
+        display: flex;
+        margin-bottom: 19px;
+        margin-top: 23px;
+        position: absolute;
+        z-index: 1;
+        justify-content: center;
+        align-items: stretch;
+        flex-direction: row-reverse;
+        flex-wrap: nowrap;
+        align-content: space-between;
+        margin-left: 35px;
+        background: rgba(0, 0, 0, .3);
+        color: white;
+        border-radius: 42px;
+        margin-right: 16px;
+        padding-left: 12px;
+    }
+}
+
+.close {
+    color: red !important;
+}

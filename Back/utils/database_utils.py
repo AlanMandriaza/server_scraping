@@ -1,7 +1,7 @@
 from models.main import Session, Creador
 
 # Lista de nombres de creadores
-nombres_creadores = ["charlottemx"]
+nombres_creadores = ["alanbrito"]
 
 # Crea una instancia de la sesión
 session = Session()

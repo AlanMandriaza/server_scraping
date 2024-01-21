@@ -1,11 +1,12 @@
-
+/* Estilos para la barra de navegación */
 body {
   margin: 0;
   font-family: 'Arial', sans-serif;
 }
+
 .navbar {
-  background-color: rgba(100, 100, 100, 0.6); 
-  backdrop-filter: blur(5px); 
+  background-color: rgba(100, 100, 100, 0.6);
+  backdrop-filter: blur(5px);
   padding: 10px 0;
   position: fixed;
   top: 0;
@@ -16,10 +17,12 @@ body {
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   transition: background-color 0.3s ease-in-out, box-shadow 0.2s ease-in-out;
 }
+
 .navbar:hover {
-  background-color: rgba(100, 100, 100, 0.8); 
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); 
+  background-color: rgba(100, 100, 100, 0.8);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
+
 .navbar-container {
   display: flex;
   justify-content: space-between;
@@ -28,16 +31,19 @@ body {
   margin: 0 auto;
   padding: 0 20px;
 }
+
 .navbar-logo {
   color: #fff;
   font-size: 24px;
 }
+
 .search-container,
 .navbar-links {
   display: flex;
   align-items: center;
   position: relative;
 }
+
 .search-container input,
 .navbar-links button {
   padding: 10px;
@@ -45,9 +51,9 @@ body {
   border-radius: 3px;
   margin-right: 5px;
   flex-grow: 1;
-  background-color: rgba(255, 255, 255, 0.5); 
+  background-color: rgba(255, 255, 255, 0.5);
   color: #333;
-  transition: background-color 0.3s, transform 0.3s; 
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 .search-container input:focus,
@@ -55,13 +61,14 @@ body {
   background-color: #dfdfdf;
 }
 
+/* Estilos para la lista de sugerencias y el menú desplegable de categorías */
 .suggestions-list,
 .categories-dropdown {
-  display: none;
+  
   position: absolute;
   top: calc(100% + 5px);
   left: 0;
-  background-color: rgba(255, 255, 255, 0.9); 
+  background-color: rgba(255, 255, 255, 0.9);
   border: 1px solid #ddd;
   border-radius: 4px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -69,58 +76,78 @@ body {
   overflow-y: auto;
   max-height: 196px;
   animation: slideDown 0.3s ease-in-out forwards;
+  transform: translateZ(0); /* Efecto 3D */
+  transform-origin: center top; /* Cambio del punto de origen */
 }
 
-.search-container input:focus + .suggestions-list,
-.suggestions-list:hover,
-.navbar-links button:focus + .categories-dropdown,
-.categories-dropdown:hover {
-  display: block;
-}
 .suggestions-list div,
 .categories-dropdown div {
-  padding: 10px;
+  padding: 8px 12px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, transform 0.3s;
+  transform: translateZ(0); /* Efecto 3D */
+  transform-origin: center left; /* Cambio del punto de origen */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra */
+  border-bottom: 1px solid #ddd;
 }
+
 .suggestions-list div:hover,
 .categories-dropdown div:hover {
   background-color: #6b6b6b;
 }
 
+/* Animación de entrada en las sugerencias */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.suggestions-list,
+.categories-dropdown {
+  animation: slideDown 0.3s ease-in-out forwards, slideIn 0.3s ease-in-out forwards;
+}
+
+/* Estilos adicionales */
 .main-content {
   margin-top: 60px;
 }
+
 .categories-button::after {
   content: '▼';
   margin-left: 5px;
 }
-.logo{
+
+.logo {
   width: 70px;
   height: 70px;
   border-radius: 50%;
   margin-top: -9px;
   margin-bottom: -26px;
 }
+
 .navbar-logo img {
-  border: 2px solid transparent; 
+  border: 2px solid transparent;
   width: 70px;
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
   opacity: 0.8;
 }
 
 .navbar-logo:hover img {
-  transform: scale(1.1); 
-  opacity: 1; 
-  border-color: rgba(49, 49, 49, 0.7); 
+  transform: scale(1.1);
+  opacity: 1;
+  border-color: rgba(49, 49, 49, 0.7);
 }
 
 .top-likes-link {
-  
-  color: #333; 
-  text-decoration: none; 
-  display: inline-block; 
-  border-radius: 3px; 
+  color: #333;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
   transition: background-color 0.3s, color 0.3s;
 }
-
